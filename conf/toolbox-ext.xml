@@ -1,0 +1,5 @@
+<tool>
+	<key>geoip</key>
+	<scope>application</scope>
+	<class>com.aquent.viewtools.GeoIP</class>
+</tool>
