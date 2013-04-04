@@ -34,15 +34,17 @@ public class GeoIP implements ViewTool {
 	 */
 	@Override
 	public void init(Object initData) {
+		Logger.info(this, "MaxMind GeoIP Viewtool Starting Up");
 		
 		// Get the filename from the plugin properties
 		String dbFileName = "";
 		try {
-			dbFileName = pluginAPI.loadPluginConfigProperty("com.aquent", "maxmind.dbFileName");
+			dbFileName = pluginAPI.loadProperty("com.aquent.plugins.maxmind", "maxmind.dbFileName");
 		} catch (Exception e) {
 			Logger.error(this,"Unable to load plugin property - maxmind.dbFileName", e);
 			return;
 		}
+		Logger.info(this, "DB File = "+dbFileName);
 		
 		// Get the assets path
 		String dbPath = "";
@@ -51,6 +53,7 @@ public class GeoIP implements ViewTool {
 		} else {
 			dbPath = Config.CONTEXT.getRealPath(File.separator + Config.getStringProperty("ASSET_PATH") + File.separator + dbFileName);
 		}
+		Logger.info(this, "DB Path = "+dbPath);
 		
 		// Setup the LookupService
 		try {
@@ -62,6 +65,7 @@ public class GeoIP implements ViewTool {
 		
 		// A flag to let the viewtool know we are good to go
 		inited = true;
+		Logger.info(this, "Maxmind GeoIP Viewtool Started");
 	}
 	
 	/**
@@ -72,6 +76,7 @@ public class GeoIP implements ViewTool {
 	 * @return the corresponding MaxMind Location object or null if the viewtool is not inited.
 	 */
 	public Location getLocationMap(String ip) {
+		Logger.info(this, "Maxmind GeoIP Viewtool - getLocation called with ip "+ip);
 		
 		// Get the Location from the LookupService
 		Location loc = null;
@@ -80,6 +85,8 @@ public class GeoIP implements ViewTool {
 		} else {
 			Logger.info(this,"Attempt to Call getLocation and not inited");
 		}
+		
+		Logger.info(this, "The Location = " + loc.toString());
 		
 		return loc;
 	}
