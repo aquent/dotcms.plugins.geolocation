@@ -1,6 +1,8 @@
 package com.aquent.viewtools;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.velocity.tools.view.tools.ViewTool;
 
@@ -69,14 +71,47 @@ public class GeoIP implements ViewTool {
 	}
 	
 	/**
-	 * This method takes the ip and returns the corresponding MaxMind Location object, which contains the following properties
+	 * This method takes the ip and returns a map, which contains the following properties:
 	 * countryCode, countryName, region, city, postalCode, latitude, longitude, dma_code, area_code, metro_code
+	 * 
+	 * @param ip the ip to lookup
+	 * @return the corresponding Location map or an empty map if the viewtool is not inited.
+	 */
+	public Map<String, Object> getLocationMap(String ip) {
+		Logger.info(this, "Maxmind GeoIP Viewtool - getLocationMap called with ip "+ip);
+		
+		// Get the Location from the LookupService
+		Location loc = null;
+		Map<String, Object> locMap = new HashMap<String, Object>();
+		if(inited) {
+			loc = cityLookup.getLocation(ip);
+			locMap.put("countryCode", loc.countryCode);
+			locMap.put("countryName", loc.countryName);
+			locMap.put("region", loc.region);
+			locMap.put("city", loc.city);
+			locMap.put("postalCode", loc.postalCode);
+			locMap.put("latitude", loc.latitude);
+			locMap.put("longitude", loc.longitude);
+			locMap.put("dma_code", loc.dma_code);
+			locMap.put("area_code", loc.area_code);
+			locMap.put("metro_code", loc.metro_code);
+		} else {
+			Logger.info(this,"Attempt to Call getLocationMap and not inited");
+		}
+		
+		Logger.info(this, "The Location = " + loc.toString());
+		
+		return locMap;
+	}
+	
+	/**
+	 * This method takes the ip and returns the MaxMind Location object
 	 * 
 	 * @param ip the ip to lookup
 	 * @return the corresponding MaxMind Location object or null if the viewtool is not inited.
 	 */
-	public Location getLocationMap(String ip) {
-		Logger.info(this, "Maxmind GeoIP Viewtool - getLocation called with ip "+ip);
+	public Location getLocation(String ip) {
+	Logger.info(this, "Maxmind GeoIP Viewtool - getLocation called with ip "+ip);
 		
 		// Get the Location from the LookupService
 		Location loc = null;
@@ -88,7 +123,7 @@ public class GeoIP implements ViewTool {
 		
 		Logger.info(this, "The Location = " + loc.toString());
 		
-		return loc;
+		return loc;	
 	}
 
 }
