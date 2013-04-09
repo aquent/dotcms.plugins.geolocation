@@ -5,6 +5,8 @@ A plugin for dotCMS that adds a viewtool enabling the use of MaxMind's (http://w
 Installation
 ==================================
 * Download and extract the plugin package to your {DOTCMS_ROOT}/plugins directory
+* Download one of MaxMind's database files and copy it to your main assets/ directory
+* Open conf/plugin.properties in the plugin and make sure the maxmind.dbFileName property matches your database file's name.
 * Shut down your server ({DOTCMS_ROOT}/bin/shutdown.[sh|bat])
 * On your server, run 'ant clean-plugins deploy-plugins'
 * Start your server back up ({DOTCMS_ROOT}/bin/startup.[sh|bat])
@@ -16,42 +18,68 @@ As MaxMind occasionally updates their location databases, you may find it helpfu
 Usage:
 ======
 ```velocity
-#set($ip = "199.196.240.241")
-#set($loc = $geoip.getLocationMap($ip))
+#set($ip     = "199.196.240.241")
+## OR, UNCOMMENT TO TRY PULLING THE USER'S IP DYNAMICALLY
+##set($ip    = $session.getAttribute("clickstream").remoteAddress)
+#set($loc    = $geoip.getLocationMap($ip))
 #set($locObj = $geoip.getLocation($ip))
 
-<p> 
-  <b>IP: $ip</b> <br />
-  $loc <br />
-  Country Code: $loc.countryCode <br />
-  Country Name: $loc.countryName <br />
-  Region: $loc.region <br />
-  City: $loc.city <br />
-  Postal Code: $loc.postalCode <br />
-  Latitutde: $loc.latitude <br />
-  Longitude: $loc.longitude <br />
-  DMA Code: $loc.dma_code <br />
-  Area Code: $loc.area_code <br />
-  Metro Code: $loc.metro_code
-</p>
+<dl> 
+  <dt>IP:</dt>
+  <dd>${ip}</dd>
+  <dt>${loc}</dt>
+  <dd></dd>
+  <dt>Country Code:</dt>
+  <dd>${loc.countryCode}</dd>
+  <dt>Country Name:</dt>
+  <dd>${loc.countryName}</dd>
+  <dt>Region:</dt>
+  <dd>${loc.region}</dd>
+  <dt>City:</dt>
+  <dd>${loc.city}</dd>
+  <dt>Postal Code:</dt>
+  <dd>${loc.postalCode}</dd>
+  <dt>Latitutde:</dt>
+  <dd>${loc.latitude}</dd>
+  <dt>Longitude:</dt>
+  <dd>${loc.longitude}</dd>
+  <dt>DMA Code:</dt>
+  <dd>${loc.dma_code}</dd>
+  <dt>Area Code:</dt>
+  <dd>${loc.area_code}</dd>
+  <dt>Metro Code:</dt>
+  <dd>${loc.metro_code}</dd>
+</dl>
 
 #set($loc2 = $geoip.getLocationMap('213.52.50.8'))
 #set($loc2Obj = $geoip.getLocation('213.52.50.8'))
 
-<p> 
-  <b>IP: 213.52.50.8</b> <br />
-  $loc <br />
-  Country Code: $loc2.countryCode <br />
-  Country Name: $loc2.countryName <br />
-  Region: $loc2.region <br />
-  City: $loc2.city <br />
-  Postal Code: $loc2.postalCode <br />
-  Latitutde: $loc2.latitude <br />
-  Longitude: $loc2.longitude <br />
-  DMA Code: $loc2.dma_code <br />
-  Area Code: $loc2.area_code <br />
-  Metro Code: $loc2.metro_code
-</p>
+<dl> 
+  <dt>IP:</dt>
+  <dd>213.52.50.8}</dd>
+  <dt>${loc}</dt>
+  <dd></dd>
+  <dt>Country Code:</dt>
+  <dd>${loc2.countryCode}</dd>
+  <dt>Country Name:</dt>
+  <dd>${loc2.countryName}</dd>
+  <dt>Region:</dt>
+  <dd>${loc2.region}</dd>
+  <dt>City:</dt>
+  <dd>${loc2.city}</dd>
+  <dt>Postal Code:</dt>
+  <dd>${loc2.postalCode}</dd>
+  <dt>Latitutde:</dt>
+  <dd>${loc2.latitude}</dd>
+  <dt>Longitude:</dt>
+  <dd>${loc2.longitude}</dd>
+  <dt>DMA Code:</dt>
+  <dd>${loc2.dma_code}</dd>
+  <dt>Area Code:</dt>
+  <dd>${loc2.area_code}</dd>
+  <dt>Metro Code:</dt>
+  <dd>${loc2.metro_code}</dd>
+</dl>
 
-<p> Distance = $locObj.distance($loc2Obj) </p>
+<p>Distance between ${esc.d}loc and ${esc.d}loc2 = ${locObj.distance($loc2Obj)} miles</p>
 ```
