@@ -1,7 +1,16 @@
-com.aquent.plugins.maxmind
-==========================
+Geolocation Viewtool (com.aquent.plugins.maxmind)
+=================================================
+A plugin for dotCMS that adds a viewtool enabling the use of MaxMind's (http://www.maxmind.com/) Java based GeoIP API (https://github.com/maxmind/geoip-api-java) and databases for geolocation functionality. The plugin will support both Lite and full versions of their location databases. You can download the Lite databases for free at http://dev.maxmind.com/geoip/geolite.
+
+Installation
+==================================
+* Download and extract the plugin package to your {DOTCMS_ROOT}/plugins directory
+* Shut down your server ({DOTCMS_ROOT}/bin/shutdown.[sh|bat])
+* On your server, run 'ant clean-plugins deploy-plugins'
+* Start your server back up ({DOTCMS_ROOT}/bin/startup.[sh|bat])
 
 Usage:
+======
 ```velocity
 #set($ip = "199.196.240.241")
 #set($loc = $geoip.getLocationMap($ip))
