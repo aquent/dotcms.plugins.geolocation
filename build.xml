@@ -1,3 +1,3 @@
-<project name="Hello World plugin" default="build">	
+<project name="MaxMind GeoIP City Location Viewtool" default="build">	
 	<import file="../common.xml"/>	
 </project>
