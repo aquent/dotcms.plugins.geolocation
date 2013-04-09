@@ -51,7 +51,7 @@ Usage:
   <dd>${loc.metro_code}</dd>
 </dl>
 
-#set($loc2 = $geoip.getLocationMap('213.52.50.8'))
+#set($loc2    = $geoip.getLocationMap('213.52.50.8'))
 #set($loc2Obj = $geoip.getLocation('213.52.50.8'))
 
 <dl> 
