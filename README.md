@@ -81,5 +81,12 @@ Usage:
   <dd>${loc2.metro_code}</dd>
 </dl>
 
-<p>Distance between ${esc.d}loc and ${esc.d}loc2 = ${locObj.distance($loc2Obj)} miles</p>
+## If you have two Location Objects you can get the distance using the Location Objects:
+<p> Distance between ${esc.d}loc and ${esc.d}loc2 = ${locObj.distance($loc2Obj)} miles </p>
+
+## If you have one Location Object and a set of lat,long for a second location you can get the distance using the viewtool helper method:
+<p> Distance between ${esc.d}loc and ${esc.d}loc2 = ${geoip.distance($locObj, $loc2.latitude, $loc2.longitude)} miles </p>
+
+## If you have two sets of lat,long you can use the viewtool helper method as well: </p>
+<p> Distance between ${esc.d}loc and ${esc.d}loc2 = ${geoip.distance($loc.latitude, $loc.longitude, $loc2.latitude, $loc2.longitude)} miles </p>
 ```

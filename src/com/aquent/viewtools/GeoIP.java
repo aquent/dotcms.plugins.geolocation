@@ -46,7 +46,7 @@ public class GeoIP implements ViewTool {
 			Logger.error(this,"Unable to load plugin property - maxmind.dbFileName", e);
 			return;
 		}
-		Logger.info(this, "DB File = "+dbFileName);
+		Logger.debug(this, "DB File = "+dbFileName);
 		
 		// Get the assets path
 		String dbPath = "";
@@ -55,7 +55,7 @@ public class GeoIP implements ViewTool {
 		} else {
 			dbPath = Config.CONTEXT.getRealPath(File.separator + Config.getStringProperty("ASSET_PATH") + File.separator + dbFileName);
 		}
-		Logger.info(this, "DB Path = "+dbPath);
+		Logger.debug(this, "DB Path = "+dbPath);
 		
 		// Setup the LookupService
 		try {
@@ -67,7 +67,7 @@ public class GeoIP implements ViewTool {
 		
 		// A flag to let the viewtool know we are good to go
 		inited = true;
-		Logger.info(this, "Maxmind GeoIP Viewtool Started");
+		Logger.info(this, "MaxMind GeoIP Viewtool Started");
 	}
 	
 	/**
@@ -78,7 +78,7 @@ public class GeoIP implements ViewTool {
 	 * @return the corresponding Location map or an empty map if the viewtool is not inited.
 	 */
 	public Map<String, Object> getLocationMap(String ip) {
-		Logger.info(this, "Maxmind GeoIP Viewtool - getLocationMap called with ip "+ip);
+		Logger.debug(this, "MaxMind GeoIP Viewtool - getLocationMap called with ip "+ip);
 		
 		// Get the Location from the LookupService
 		Location loc = null;
@@ -99,8 +99,6 @@ public class GeoIP implements ViewTool {
 			Logger.info(this,"Attempt to Call getLocationMap and not inited");
 		}
 		
-		Logger.info(this, "The Location = " + loc.toString());
-		
 		return locMap;
 	}
 	
@@ -111,7 +109,7 @@ public class GeoIP implements ViewTool {
 	 * @return the corresponding MaxMind Location object or null if the viewtool is not inited.
 	 */
 	public Location getLocation(String ip) {
-	Logger.info(this, "Maxmind GeoIP Viewtool - getLocation called with ip "+ip);
+		Logger.debug(this, "MaxMind GeoIP Viewtool - getLocation called with ip "+ip);
 		
 		// Get the Location from the LookupService
 		Location loc = null;
@@ -121,9 +119,51 @@ public class GeoIP implements ViewTool {
 			Logger.info(this,"Attempt to Call getLocation and not inited");
 		}
 		
-		Logger.info(this, "The Location = " + loc.toString());
-		
 		return loc;	
+	}
+	
+	/**
+	 * Helper method to get a distance from a MaxMind Location Object and known latitude and longitude.
+	 * 
+	 * @param loc the MaxMind Location object to compare against
+	 * @param lat the latitude of the second location
+	 * @param lon the longitude of the second location
+	 * @return the distance in miles between loc and the location represented by lat,long
+	 */
+	public double distance(Location loc, float lat, float lon) {
+		Logger.debug(this, "MaxMind GeoIP Viewtool - distance method called");
+		
+		// Build a location object for the second Location
+		Location loc2 = new Location();
+		loc2.latitude = lat;
+		loc2.longitude = lon;
+		
+		return loc.distance(loc2);
+	}
+	
+	/**
+	 * Helper method to get a distance from a MaxMind Location Object and known latitude and longitude.
+	 * 
+	 * @param lat the latitude of the first location
+	 * @param lon the longitude of the first location
+	 * @param lat2 the latitude of the second location
+	 * @param lon2 the longitude of the second location
+	 * @return the distance in miles between the two locations
+	 */
+	public double distance(float lat, float lon, float lat2, float lon2) {
+		Logger.debug(this, "MaxMind GeoIP Viewtool - distance method called");
+		
+		// Build a location object for the first Location
+		Location loc = new Location();
+		loc.latitude = lat;
+		loc.longitude = lon;
+		
+		// Build a location object for the second Location
+		Location loc2 = new Location();
+		loc2.latitude = lat2;
+		loc2.longitude = lon2;
+		
+		return loc.distance(loc2);
 	}
 
 }
