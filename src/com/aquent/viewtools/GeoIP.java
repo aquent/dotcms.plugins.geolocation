@@ -59,7 +59,7 @@ public class GeoIP implements ViewTool {
 		
 		// Setup the LookupService
 		try {
-			cityLookup = new LookupService(dbPath, LookupService.GEOIP_MEMORY_CACHE);
+			cityLookup = new LookupService(dbPath, LookupService.GEOIP_MEMORY_CACHE | LookupService.GEOIP_CHECK_CACHE);
 		} catch (Exception e) {
 			Logger.error(this,"Unable to get a LookupService",e);
 			return;
