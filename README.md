@@ -1,4 +1,4 @@
-Geolocation Viewtool (com.aquent.plugins.maxmind)
+Geolocation Viewtool
 =================================================
 A plugin for dotCMS that adds a viewtool enabling the use of MaxMind's (http://www.maxmind.com/) Java based GeoIP API (https://github.com/maxmind/geoip-api-java) and databases for geolocation functionality. The plugin will support both Lite and full versions of their location databases. You can download the Lite databases for free at http://dev.maxmind.com/geoip/geolite.
 
