@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
-Plugin-Name: MaxMind GeoIP City Location Viewtool
+Plugin-Name: Geolocation Viewtool
 Plugin-Version: 1.0
-Author: cfalzone@aquent.com
+Author: Aquent, LLC (cfalzone@aquent.com)
