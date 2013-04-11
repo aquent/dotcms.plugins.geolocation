@@ -41,7 +41,7 @@ public class GeoIP implements ViewTool {
 		// Get the filename from the plugin properties
 		String dbFileName = "";
 		try {
-			dbFileName = pluginAPI.loadProperty("com.aquent.plugins.maxmind", "maxmind.dbFileName");
+			dbFileName = pluginAPI.loadProperty("com.aquent.plugins.geolocation", "maxmind.dbFileName");
 		} catch (Exception e) {
 			Logger.error(this,"Unable to load plugin property - maxmind.dbFileName", e);
 			return;
