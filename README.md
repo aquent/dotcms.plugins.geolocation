@@ -11,12 +11,16 @@ Installation
 * On your server, run 'ant clean-plugins deploy-plugins'
 * Start your server back up ({DOTCMS_ROOT}/bin/startup.[sh|bat])
 
+Compatibility
+=============
+Known to be working in dotCMS 1.9.5 and 2.2.1. Should be fully 2.x compatible though.
+
 Location Database Updates
 =========================
 As MaxMind occasionally updates their location databases, you may find it helpful to set up a process to automatically pull fresh copies of the database rather than doing it manually. MaxMind provides instructions for setting up a cron job using a license key to automate that process at http://www.maxmind.com/en/license_key. This works for both paid and lite versions of the database.
 
-Usage:
-======
+Usage
+=====
 ```velocity
 #set($ip     = "199.196.240.241")
 ## OR, UNCOMMENT TO TRY PULLING THE USER'S IP DYNAMICALLY
