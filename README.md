@@ -3,24 +3,29 @@ Geolocation Viewtool
 A plugin for dotCMS that adds a viewtool enabling the use of MaxMind's (http://www.maxmind.com/) Java based GeoIP API (https://github.com/maxmind/geoip-api-java) and databases for geolocation functionality. The plugin will support both Lite and full versions of their location databases. You can download the Lite databases for free at http://dev.maxmind.com/geoip/geolite.
 
 Installation
-==================================
-* Download and extract the plugin package to your {DOTCMS_ROOT}/plugins directory
-* Download one of MaxMind's database files and copy it to your main assets/ directory
-* Open conf/plugin.properties in the plugin and make sure the maxmind.dbFileName property matches your database file's name.
-* Shut down your server ({DOTCMS_ROOT}/bin/shutdown.[sh|bat])
-* On your server, run 'ant clean-plugins deploy-plugins'
-* Start your server back up ({DOTCMS_ROOT}/bin/startup.[sh|bat])
+-----
+* Add a text host vairiable called "Maxmind DB Filename" (maxmindDbFilename)
+* Download the Maxmind City Lite or Paid Database and put it in your assets directory 
+* See the note below about updating your maxmind database automatically
+* On your Default Host set the value of the field to the name of the file you placed in your assets directory
+* Navigate to the dotCMS Dynamic plugins page: "System" > "Dynamic Plugins"
+* Click on "Upload plugin" and select the .jar file located in the "build/jar/" folder
+* Click on "Exported Packages" and add the following to the bottom of the list
+```
+,com.dotmarketing.beans,
+com.dotmarketing.plugin.business
+```
 
 Compatibility
-=============
-Known to be working in dotCMS 1.9.5 and 2.2.1. Should be fully 2.x compatible though.
+-----
+Known to work with 2.5.1. Should be fully 2.3+ compatible though.
 
 Location Database Updates
-=========================
+-----
 As MaxMind occasionally updates their location databases, you may find it helpful to set up a process to automatically pull fresh copies of the database rather than doing it manually. MaxMind provides instructions for setting up a cron job using a license key to automate that process at http://www.maxmind.com/en/license_key. This works for both paid and lite versions of the database.
 
 Usage
-=====
+-----
 ```velocity
 #set($ip     = "199.196.240.241")
 ## OR, UNCOMMENT TO TRY PULLING THE USER'S IP DYNAMICALLY

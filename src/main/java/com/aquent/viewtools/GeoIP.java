@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.velocity.tools.view.tools.ViewTool;
 
+import com.dotmarketing.beans.Host;
 import com.dotmarketing.business.APILocator;
 import com.dotmarketing.plugin.business.PluginAPI;
 import com.dotmarketing.util.Config;
@@ -38,15 +39,22 @@ public class GeoIP implements ViewTool {
 	public void init(Object initData) {
 		Logger.info(this, "MaxMind GeoIP Viewtool Starting Up");
 		
-		// Get the filename from the plugin properties
-		String dbFileName = "";
+		// Get the default host
+    	Host defaultHost;
 		try {
-			dbFileName = pluginAPI.loadProperty("com.aquent.plugins.geolocation", "maxmind.dbFileName");
+			defaultHost = APILocator.getHostAPI().findDefaultHost(APILocator.getUserAPI().getSystemUser(), false);
 		} catch (Exception e) {
-			Logger.error(this,"Unable to load plugin property - maxmind.dbFileName", e);
+			Logger.error(this, "Unable to get the default host", e);
 			return;
 		}
-		Logger.debug(this, "DB File = "+dbFileName);
+		
+		Logger.info(this, "Default Host = "+defaultHost.getHostname());
+		
+		// Get the dbFileName from the defualt Host
+		String dbFileName = defaultHost.getStringProperty("maxmindDbFilename");
+		if(! UtilMethods.isSet(dbFileName)) {
+			dbFileName = "GeoLiteCity.dat";
+		}
 		
 		// Get the assets path
 		String dbPath = "";

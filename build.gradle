@@ -1,0 +1,49 @@
+apply plugin: 'war'
+apply plugin: 'osgi'
+apply plugin: 'eclipse'
+
+sourceCompatibility = '1.6'
+version = '0.1'
+
+repositories {
+	maven {
+        url "http://repo.dotcms.com/artifactory/libs-release"
+    }
+}
+
+dependencies {
+	compile (group: 'com.dotcms', name: 'dotcms', version: '2.5.1'){
+		transitive = true
+	}
+	providedCompile "javax.servlet:servlet-api:2.5"
+	compile fileTree(dir: 'src/main/resources/lib', include: '*.jar')
+}
+
+jar {
+    manifest {
+        name = 'Aquent GeoLocation'
+        symbolicName = 'com.aquent.plugins.geolocation'
+        instruction 'Bundle-Vendor', 'Aquent, LLC (cfalzone@aquent.com)'
+        instruction 'Bundle-Description', 'Aquent GeoLocation Plugin'
+        instruction 'Bundle-DocURL', 'http://www.aquent.com'
+        instruction 'Bundle-Activator', 'com.aquent.viewtools.GeoIPActivator'
+        instruction 'Bundle-ClassPath', '.', 'lib/maxmindgeoip.jar'
+        instruction 'DynamicImport-Package', '*'
+        instruction 'Import-Package', '!com.maxmind.*', '*'
+    }
+}
+
+task removeVersionsOnManifest (dependsOn: ['jar']) << {
+	def manifest1=new java.util.jar.Manifest(new FileInputStream('build/tmp/jar/MANIFEST.MF'))
+	def imports = manifest1.getMainAttributes().find { it.key.toString()=="Import-Package" }
+	imports.value=imports.value.toString().replaceAll(~/;version="[\(\[][0-9\.]+,[0-9\.]+[\)\]]"/,'')
+	manifest1.write(new FileOutputStream("build/tmp/jar/MANIFEST_NOVERSIONS.MF"))
+}
+
+task osgijar(type: Jar, dependsOn: ['removeVersionsOnManifest'] ) { 
+    appendix = "generatedjar" 
+    from zipTree(jar.archivePath) // add original content 
+    manifest {
+    	from('build/tmp/jar/MANIFEST_NOVERSIONS.MF')
+    } 
+} 
