@@ -99,3 +99,8 @@ Usage
 ## If you have two sets of lat,long you can use the viewtool helper method as well:
 <p>Distance between ${esc.d}loc and ${esc.d}loc2 = ${geoip.distance($loc.latitude, $loc.longitude, $loc2.latitude, $loc2.longitude)} miles</p>
 ```
+
+Building
+--------
+* Install Gradle (if not already installed)
+* gradle jar 
