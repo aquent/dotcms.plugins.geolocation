@@ -1,34 +1,41 @@
-apply plugin: 'war'
 apply plugin: 'osgi'
 apply plugin: 'eclipse'
+apply plugin: 'propdeps'
+apply plugin: 'propdeps-maven'
+apply plugin: 'propdeps-eclipse'
 
-sourceCompatibility = '1.6'
-version = '1.0'
+sourceCompatibility = '1.7'
 
 repositories {
-	maven {
-        url "http://repo.dotcms.com/artifactory/libs-release"
-    }
+	mavenCentral()
+	maven { url "http://repo.dotcms.com/artifactory/libs-release" }
 }
 
 dependencies {
-	compile (group: 'com.dotcms', name: 'dotcms', version: '2.5.1'){
-		transitive = true
-	}
-	providedCompile "javax.servlet:servlet-api:2.5"
+	compile('com.dotcms:dotcms:2.5.3') { transitive = true }
+	provided('javax.servlet:servlet-api:2.5')
 	compile fileTree(dir: 'src/main/resources/lib', include: '*.jar')
 }
 
+buildscript {
+	repositories {
+		maven { url 'http://repo.spring.io/plugins-release' }
+	}
+	dependencies {
+		classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.7'
+	}
+}
+
 jar {
-    manifest {
-        name = 'Aquent GeoLocation'
-        symbolicName = 'com.aquent.plugins.geolocation'
-        instruction 'Bundle-Vendor', 'Aquent, LLC (cfalzone@aquent.com)'
-        instruction 'Bundle-Description', 'Aquent GeoLocation Plugin'
-        instruction 'Bundle-DocURL', 'http://www.aquent.com'
-        instruction 'Bundle-Activator', 'com.aquent.viewtools.GeoIPActivator'
-        instruction 'Bundle-ClassPath', '.', 'lib/maxmindgeoip.jar'
-        instruction 'DynamicImport-Package', '*'
-        instruction 'Import-Package', '!org.springframework.*', '!com.maxmind.*', '*;version=0'
-    }
+	manifest {
+		name = 'Aquent GeoLocation'
+		symbolicName = 'com.aquent.plugins.geolocation'
+		instruction 'Bundle-Vendor', 'Aquent, LLC (cfalzone@aquent.com)'
+		instruction 'Bundle-Description', 'Aquent GeoLocation Plugin'
+		instruction 'Bundle-DocURL', 'http://www.aquent.com'
+		instruction 'Bundle-Activator', 'com.aquent.viewtools.GeoIPActivator'
+		instruction 'Bundle-ClassPath', '.', 'lib/maxmindgeoip.jar'
+		instruction 'DynamicImport-Package', '*'
+		instruction 'Import-Package', '!org.springframework.*', '!com.maxmind.*', '*;version=0'
+	}
 }
