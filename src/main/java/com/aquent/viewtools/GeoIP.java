@@ -30,7 +30,9 @@ public class GeoIP implements ViewTool {
 
 	private LookupService cityLookup;
 	private boolean inited = false;
-	PluginAPI pluginAPI = APILocator.getPluginAPI(); 
+	PluginAPI pluginAPI = APILocator.getPluginAPI();
+	
+	
 	
 	/**
 	 * Sets up the viewtool.  This viewtool should be application scoped.
@@ -48,7 +50,7 @@ public class GeoIP implements ViewTool {
 			return;
 		}
 		
-		Logger.info(this, "Default Host = "+defaultHost.getHostname());
+		Logger.debug(this, "Default Host = "+defaultHost.getHostname());
 		
 		// Get the dbFileName from the defualt Host
 		String dbFileName = defaultHost.getStringProperty("maxmindDbFilename");
@@ -58,10 +60,10 @@ public class GeoIP implements ViewTool {
 		
 		// Get the assets path
 		String dbPath = "";
-		if (UtilMethods.isSet(Config.getStringProperty("ASSET_REAL_PATH"))) {
-			dbPath = Config.getStringProperty("ASSET_REAL_PATH") + File.separator + dbFileName;
+		if (UtilMethods.isSet(Config.getStringProperty("ASSET_REAL_PATH", null))) {
+			dbPath = Config.getStringProperty("ASSET_REAL_PATH", null) + File.separator + dbFileName;
 		} else {
-			dbPath = Config.CONTEXT.getRealPath(File.separator + Config.getStringProperty("ASSET_PATH") + File.separator + dbFileName);
+			dbPath = Config.CONTEXT.getRealPath(File.separator + Config.getStringProperty("ASSET_PATH", null) + File.separator + dbFileName);
 		}
 		Logger.debug(this, "DB Path = "+dbPath);
 		
@@ -85,9 +87,7 @@ public class GeoIP implements ViewTool {
 	 * @param ip the ip to lookup
 	 * @return the corresponding Location map or an empty map if the viewtool is not inited.
 	 */
-	public Map<String, Object> getLocationMap(String ip) {
-		Logger.debug(this, "MaxMind GeoIP Viewtool - getLocationMap called with ip "+ip);
-		
+	public Map<String, Object> getLocationMap(String ip) {		
 		// Get the Location from the LookupService
 		Location loc = null;
 		Map<String, Object> locMap = new HashMap<String, Object>();
@@ -116,9 +116,7 @@ public class GeoIP implements ViewTool {
 	 * @param ip the ip to lookup
 	 * @return the corresponding MaxMind Location object or null if the viewtool is not inited.
 	 */
-	public Location getLocation(String ip) {
-		Logger.debug(this, "MaxMind GeoIP Viewtool - getLocation called with ip "+ip);
-		
+	public Location getLocation(String ip) {		
 		// Get the Location from the LookupService
 		Location loc = null;
 		if(inited) {
@@ -138,9 +136,7 @@ public class GeoIP implements ViewTool {
 	 * @param lon the longitude of the second location
 	 * @return the distance in miles between loc and the location represented by lat,long
 	 */
-	public double distance(Location loc, float lat, float lon) {
-		Logger.debug(this, "MaxMind GeoIP Viewtool - distance method called");
-		
+	public double distance(Location loc, float lat, float lon) {		
 		// Build a location object for the second Location
 		Location loc2 = new Location();
 		loc2.latitude = lat;
@@ -158,9 +154,7 @@ public class GeoIP implements ViewTool {
 	 * @param lon2 the longitude of the second location
 	 * @return the distance in miles between the two locations
 	 */
-	public double distance(float lat, float lon, float lat2, float lon2) {
-		Logger.debug(this, "MaxMind GeoIP Viewtool - distance method called");
-		
+	public double distance(float lat, float lon, float lat2, float lon2) {		
 		// Build a location object for the first Location
 		Location loc = new Location();
 		loc.latitude = lat;
