@@ -37,6 +37,8 @@ jar {
 		instruction 'Bundle-ClassPath', '.', 'lib/maxmindgeoip.jar'
 		instruction 'DynamicImport-Package', '*'
 		instruction 'Import-Package', '!org.springframework.*', '!com.maxmind.*', '*;version=0'
+		instruction 'Embed-Dependency', 'geoip-api'
+		instruction 'Embed-Transitive', 'true'
 	}
 }
 
