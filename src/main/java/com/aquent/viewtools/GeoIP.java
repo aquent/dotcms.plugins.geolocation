@@ -61,8 +61,8 @@ public class GeoIP implements ViewTool {
 		
 		// Get the assets path
 		String dbPath = Config.getStringProperty("ASSET_REAL_PATH", 
-		                      FileUtil.getRealPath(Config.getStringProperty("ASSET_PATH", null)) + File.separator)
-		                  + dbFileName;
+		                      FileUtil.getRealPath(Config.getStringProperty("ASSET_PATH", null)))
+		                  + File.separator + dbFileName;
 
 		Logger.debug(this, "DB Path = "+dbPath);
 		
