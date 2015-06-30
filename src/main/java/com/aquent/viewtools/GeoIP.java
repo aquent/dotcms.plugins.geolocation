@@ -12,6 +12,7 @@ import com.dotmarketing.plugin.business.PluginAPI;
 import com.dotmarketing.util.Config;
 import com.dotmarketing.util.Logger;
 import com.dotmarketing.util.UtilMethods;
+import com.liferay.util.FileUtil;
 import com.maxmind.geoip.Location;
 import com.maxmind.geoip.LookupService;
 
@@ -59,12 +60,10 @@ public class GeoIP implements ViewTool {
 		}
 		
 		// Get the assets path
-		String dbPath = "";
-		if (UtilMethods.isSet(Config.getStringProperty("ASSET_REAL_PATH", null))) {
-			dbPath = Config.getStringProperty("ASSET_REAL_PATH", null) + File.separator + dbFileName;
-		} else {
-			dbPath = Config.CONTEXT.getRealPath(File.separator + Config.getStringProperty("ASSET_PATH", null) + File.separator + dbFileName);
-		}
+		String dbPath = Config.getStringProperty("ASSET_REAL_PATH", 
+		                      FileUtil.getRealPath(Config.getStringProperty("ASSET_PATH", null)) + File.separator)
+		                  + dbFileName;
+
 		Logger.debug(this, "DB Path = "+dbPath);
 		
 		// Setup the LookupService
