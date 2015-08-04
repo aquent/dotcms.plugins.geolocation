@@ -12,8 +12,10 @@ repositories {
 }
 
 dependencies {
-	compile('com.dotcms:dotcms:3.1') { transitive = true }
-	compile('com.maxmind.geoip:geoip-api:1.2.14')
+	compile('com.dotcms:dotcms:3.2') { transitive = true }
+	compile('com.maxmind.geoip2:geoip2:2.3.1')
+	compile('com.fasterxml.jackson.core:jackson-core:2.5.3')
+	compile('com.fasterxml.jackson.core:jackson-annotations:2.5.0')
 	provided('javax.servlet:servlet-api:2.5')
 }
 
@@ -37,7 +39,7 @@ jar {
 		instruction 'Bundle-ClassPath', '.', 'lib/maxmindgeoip.jar'
 		instruction 'DynamicImport-Package', '*'
 		instruction 'Import-Package', '!org.springframework.*', '!com.maxmind.*', '*;version=0'
-		instruction 'Embed-Dependency', 'geoip-api'
+		instruction 'Embed-Dependency', 'geoip2', 'jackson-core', 'jackson-annotations'
 		instruction 'Embed-Transitive', 'true'
 	}
 }
