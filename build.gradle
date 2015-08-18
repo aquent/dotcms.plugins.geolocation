@@ -12,9 +12,11 @@ repositories {
 }
 
 dependencies {
-	compile('com.dotcms:dotcms:2.5.3') { transitive = true }
+	compile('com.dotcms:dotcms:3.2') { transitive = true }
+	compile('com.maxmind.geoip2:geoip2:2.3.1')
+	compile('com.fasterxml.jackson.core:jackson-core:2.5.3')
+	compile('com.fasterxml.jackson.core:jackson-annotations:2.5.0')
 	provided('javax.servlet:servlet-api:2.5')
-	compile fileTree(dir: 'src/main/resources/lib', include: '*.jar')
 }
 
 buildscript {
@@ -37,5 +39,64 @@ jar {
 		instruction 'Bundle-ClassPath', '.', 'lib/maxmindgeoip.jar'
 		instruction 'DynamicImport-Package', '*'
 		instruction 'Import-Package', '!org.springframework.*', '!com.maxmind.*', '*;version=0'
+		instruction 'Embed-Dependency', 'geoip2', 'jackson-core', 'jackson-annotations'
+		instruction 'Embed-Transitive', 'true'
 	}
 }
+
+/*
+ * reads the OSGI instruction "Embed-Dependency" and "Embed-Transitive"
+ * and sets the "Bundle-ClassPath" instruction as well as copy instruction for
+ * the related artifacts accordingly
+ */
+task processEmbedded << {
+	ext.embedInstruction = jar.manifest.instructions.get("Embed-Dependency")
+	ext.transitive = jar.manifest.instructions.get("Embed-Transitive");
+	if(embedInstruction != null){
+		def includedArtifacts = [] as Set
+		getDependencies(embedInstruction,transitive).each { dependency ->
+			dependency.moduleArtifacts.each { artifact ->
+				includedArtifacts.add(artifact.file)
+			}
+		}
+		jar.manifest.instruction("Bundle-ClassPath",'.') //add the default classpath
+		includedArtifacts.each { artifact -> 
+			jar.from(artifact)
+			jar.manifest.instruction("Bundle-ClassPath",artifact.name)
+        }
+    }
+}
+
+/**
+ * Gets the list of ResolvedDependencies for the list of embeded dependency names
+ * @param embededList the list with the dependencies to embed
+ * @param recursive The embed transitive state
+ * @return the list of dependencies. An empty Set if none
+ */
+def getDependencies(embededList, recursive){
+	def dependencies = [] as Set //resolved Dependencies
+	def dependencyMap = [:]; 
+	// This only considers top level resolved dependencies, but other should 
+	// not be embeded anyway.
+	project.configurations.runtime.resolvedConfiguration.firstLevelModuleDependencies.each { dependency -> 
+		dependencyMap.put(dependency.moduleName,dependency)
+	}
+	embededList.each { embeded -> 
+		ext.dependency = dependencyMap.get(embeded)
+		if(dependency != null){
+			println "dependency "+dependency.name
+			dependencies.add(dependency)
+			if(recursive){
+				dependency.children.each { child -> 
+					println "  child "+child.name+" Parents: "+child.parents
+					dependencies.add(child) 
+				}
+			}
+		} else {
+			println "WARNING: dependency "+embeded+" not found"
+		}
+	}
+	return dependencies
+}
+
+compileJava.dependsOn processEmbedded
