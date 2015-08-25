@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-	compile('com.dotcms:dotcms:2.5.3') { transitive = true }
+	compile('com.dotcms:dotcms:3.2') { transitive = true }
 	compile('com.maxmind.geoip2:geoip2:2.3.1')
 	compile('com.fasterxml.jackson.core:jackson-core:2.5.3')
 	compile('com.fasterxml.jackson.core:jackson-annotations:2.5.0')
