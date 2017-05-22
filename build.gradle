@@ -4,7 +4,7 @@ apply plugin: 'propdeps'
 apply plugin: 'propdeps-maven'
 apply plugin: 'propdeps-eclipse'
 
-sourceCompatibility = '1.7'
+sourceCompatibility = '1.8'
 
 repositories {
 	mavenCentral()
@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-	compile('com.dotcms:dotcms:3.2') { transitive = true }
+	compile('com.dotcms:dotcms:3.6.1') { transitive = true }
 	compile('com.maxmind.geoip2:geoip2:2.3.1')
 	compile('com.fasterxml.jackson.core:jackson-core:2.5.3')
 	compile('com.fasterxml.jackson.core:jackson-annotations:2.5.0')
@@ -49,22 +49,24 @@ jar {
  * and sets the "Bundle-ClassPath" instruction as well as copy instruction for
  * the related artifacts accordingly
  */
-task processEmbedded << {
-	ext.embedInstruction = jar.manifest.instructions.get("Embed-Dependency")
-	ext.transitive = jar.manifest.instructions.get("Embed-Transitive");
-	if(embedInstruction != null){
-		def includedArtifacts = [] as Set
-		getDependencies(embedInstruction,transitive).each { dependency ->
-			dependency.moduleArtifacts.each { artifact ->
-				includedArtifacts.add(artifact.file)
+task processEmbedded {
+	doLast {
+		ext.embedInstruction = jar.manifest.instructions.get("Embed-Dependency")
+		ext.transitive = jar.manifest.instructions.get("Embed-Transitive");
+		if(embedInstruction != null){
+			def includedArtifacts = [] as Set
+			getDependencies(embedInstruction,transitive).each { dependency ->
+				dependency.moduleArtifacts.each { artifact ->
+					includedArtifacts.add(artifact.file)
+				}
 			}
-		}
-		jar.manifest.instruction("Bundle-ClassPath",'.') //add the default classpath
-		includedArtifacts.each { artifact -> 
-			jar.from(artifact)
-			jar.manifest.instruction("Bundle-ClassPath",artifact.name)
-        }
-    }
+			jar.manifest.instruction("Bundle-ClassPath",'.') //add the default classpath
+			includedArtifacts.each { artifact -> 
+				jar.from(artifact)
+				jar.manifest.instruction("Bundle-ClassPath",artifact.name)
+	        }
+	    }
+	}
 }
 
 /**

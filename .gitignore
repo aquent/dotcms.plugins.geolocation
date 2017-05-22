@@ -7,3 +7,4 @@
 .settings/
 build/resources/
 build/tmp/
+.DS_Store
