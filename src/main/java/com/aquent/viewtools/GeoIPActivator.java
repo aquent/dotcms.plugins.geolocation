@@ -1,5 +1,8 @@
 package com.aquent.viewtools;
 
+import com.dotcms.repackage.org.apache.logging.log4j.LogManager;
+import com.dotcms.repackage.org.apache.logging.log4j.core.LoggerContext;
+import com.dotmarketing.loggers.Log4jUtil;
 import com.dotmarketing.osgi.GenericBundleActivator;
 
 import org.osgi.framework.BundleContext;
@@ -10,9 +13,14 @@ import org.osgi.framework.BundleContext;
  * Plugin Activator.  Registers the view tool.
  */
 public class GeoIPActivator extends GenericBundleActivator {
+    private LoggerContext pluginLoggerContext;
 
     @Override
     public void start(BundleContext bundleContext) throws Exception {
+        // Setup Logger
+        LoggerContext dotcmsLoggerContext = Log4jUtil.getLoggerContext();
+        pluginLoggerContext = (LoggerContext) LogManager.getContext(this.getClass().getClassLoader(),
+            false, dotcmsLoggerContext, dotcmsLoggerContext.getConfigLocation());
 
         //Initializing services...
         initializeServices(bundleContext);
@@ -24,6 +32,9 @@ public class GeoIPActivator extends GenericBundleActivator {
     @Override
     public void stop(BundleContext bundleContext) throws Exception {
         unregisterViewToolServices();
+        unpublishBundleServices();
+        unregisterServices(bundleContext);
+        Log4jUtil.shutdown(pluginLoggerContext);
     }
 
 }
