@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-	compile('com.dotcms:dotcms:3.6.1') { transitive = true }
+	compile('com.dotcms:dotcms:4.1.1') { transitive = true }
 	compile('com.maxmind.geoip2:geoip2:2.3.1')
 	compile('com.fasterxml.jackson.core:jackson-core:2.5.3')
 	compile('com.fasterxml.jackson.core:jackson-annotations:2.5.0')
@@ -36,7 +36,6 @@ jar {
 		instruction 'Bundle-Description', 'Aquent GeoLocation Plugin'
 		instruction 'Bundle-DocURL', 'http://www.aquent.com'
 		instruction 'Bundle-Activator', 'com.aquent.viewtools.GeoIPActivator'
-		instruction 'Bundle-ClassPath', '.', 'lib/maxmindgeoip.jar'
 		instruction 'DynamicImport-Package', '*'
 		instruction 'Import-Package', '!org.springframework.*', '!com.maxmind.*', '*;version=0'
 		instruction 'Embed-Dependency', 'geoip2', 'jackson-core', 'jackson-annotations'
