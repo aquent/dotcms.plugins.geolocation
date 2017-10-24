@@ -19,7 +19,7 @@ stage('Build') {
       submoduleCfg: [],
       userRemoteConfigs: [
         [credentialsId: '92ca036f-9e54-41bf-a484-d3ab8555c6ae',
-        url: 'git@github.com:aquent/dotcms.osgi.git']]])
+        url: "git@github.com:aquent/dotcms.plugins.${plugin}.git"]]])
     GIT_BRANCH = sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
     slackSend "[${plugin} - ${GIT_BRANCH}] Build Started - ${env.JOB_NAME} # ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
     sh './gradlew clean jar'
