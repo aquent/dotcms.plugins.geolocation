@@ -2,6 +2,7 @@
 /generated/
 /bin/
 .classpath
+.checkstyle
 .gradle/
 .project
 .settings/
