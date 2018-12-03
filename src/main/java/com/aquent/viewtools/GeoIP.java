@@ -34,7 +34,7 @@ public class GeoIP implements ViewTool {
     /**
      * Sets up the viewtool.  This viewtool should be application scoped.
      *
-     * @param initiData Initialization data passed in from velocity.
+     * @param initData Initialization data passed in from velocity.
      */
     @Override
     public void init(Object initData) {
