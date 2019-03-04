@@ -13,7 +13,7 @@ Installation
 
 Compatibility
 -----
-dotCMS 3x.
+dotCMS 5x. See previous releases for older versions.
 
 Location Database Updates
 -----
