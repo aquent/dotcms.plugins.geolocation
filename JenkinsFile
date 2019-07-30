@@ -13,9 +13,9 @@ def GIT_BRANCH
 def jdkHome = '/usr/java/jdk1.8.0_121'
 
 stage('Build') {
-  env.JAVA_HOME="${jdkHome}"
-  env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
   node {
+    env.JAVA_HOME="${jdkHome}"
+    env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
     checkout([$class: 'GitSCM',
       branches: scm.branches,
       doGenerateSubmoduleConfigurations: false,
@@ -54,8 +54,6 @@ stage('Deploy Dev') {
 }
 
 stage('Deploy Stag') {
-  env.JAVA_HOME="${jdkHome}"
-  env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
   if (GIT_BRANCH == 'develop') {
     slackSend message:"""
       @here Ready to Promote Job to Stag?
@@ -66,6 +64,8 @@ stage('Deploy Stag') {
     input 'Promote to Stag?'
 
     node {
+      env.JAVA_HOME="${jdkHome}"
+      env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
       slackSend message:"[${plugin} - ${GIT_BRANCH}] Stag Deploy Started - ${env.JOB_NAME} # ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
       ws("/usr/local/jenkins/workspace/${plugin}/stag") {
         sh 'rm -f build/libs/*.jar'
@@ -84,8 +84,6 @@ stage('Deploy Stag') {
 }
 
 stage('Deploy Prod') {
-  env.JAVA_HOME="${jdkHome}"
-  env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
   if (GIT_BRANCH == 'master') {
     slackSend message:"""
       @here Ready to Promote Job to Production?
@@ -96,6 +94,8 @@ stage('Deploy Prod') {
     input 'Promote to Production?'
 
     node {
+      env.JAVA_HOME="${jdkHome}"
+      env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
       slackSend message:"[${plugin} - ${GIT_BRANCH}] Prod Deploy Started - ${env.JOB_NAME} # ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
       ws("/usr/local/jenkins/workspace/${plugin}/prod") {
         sh 'rm -f build/libs/*.jar'
