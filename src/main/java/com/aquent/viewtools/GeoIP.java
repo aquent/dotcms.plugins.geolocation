@@ -3,6 +3,8 @@ package com.aquent.viewtools;
 import java.io.File;
 import java.net.InetAddress;
 
+import com.maxmind.geoip2.exception.AddressNotFoundException;
+import com.maxmind.geoip2.record.Location;
 import org.apache.velocity.tools.view.tools.ViewTool;
 
 import com.dotmarketing.beans.Host;
@@ -91,6 +93,9 @@ public class GeoIP implements ViewTool {
             try {
                 InetAddress ipAddress = InetAddress.getByName(ip);
                 response = cityLookup.city(ipAddress);
+            } catch (AddressNotFoundException e) {
+                // This happens a little too often to actually log
+                //Logger.debug(this, "Address not found: " + ip, e);
             } catch (Exception e) {
                 Logger.error(this, "Could not get location from ip address: " + ip, e);
             }
@@ -109,8 +114,14 @@ public class GeoIP implements ViewTool {
      * @return the distance between loc and loc2 in miles.
      */
     public double distance(CityResponse loc, CityResponse loc2) {
-        return distance(loc.getLocation().getLatitude(), loc.getLocation().getLongitude(),
-                        loc2.getLocation().getLatitude(), loc2.getLocation().getLongitude());
+        if (loc != null && loc2 != null) {
+            Location l1 = loc.getLocation();
+            Location l2 = loc2.getLocation();
+            if(l1 != null && l2 != null) {
+                return distance(l1.getLatitude(), l1.getLongitude(), l2.getLatitude(), l2.getLongitude());
+            }
+        }
+        return Double.MAX_VALUE;
     }
 
     /**
@@ -122,7 +133,13 @@ public class GeoIP implements ViewTool {
      * @return the distance in miles between loc and the location represented by lat,long in miles.
      */
     public double distance(CityResponse loc, double lat, double lon) {
-        return distance(loc.getLocation().getLatitude(), loc.getLocation().getLongitude(), lat, lon);
+        if (loc != null) {
+            Location l = loc.getLocation();
+            if (l != null) {
+                return distance(l.getLatitude(), l.getLongitude(), lat, lon);
+            }
+        }
+        return Double.MAX_VALUE;
     }
 
     /**
