@@ -10,7 +10,11 @@ def deployPath = '/data/wwwroot/dotcms/current/dotCMS/WEB-INF/felix/load'
 
 def GIT_BRANCH
 
+def jdkHome = '/usr/java/jdk1.8.0_121'
+
 stage('Build') {
+  env.JAVA_HOME="${jdkHome}"
+  env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
   node {
     checkout([$class: 'GitSCM',
       branches: scm.branches,
@@ -31,6 +35,8 @@ stage('Build') {
 
 stage('Deploy Dev') {
   node {
+    env.JAVA_HOME="${jdkHome}"
+    env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
     if (GIT_BRANCH == 'develop') {
       slackSend message:"[${plugin} - ${GIT_BRANCH}] Dev Deploy Started - ${env.JOB_NAME} # ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
       sh 'rm build/libs/*.jar'
@@ -48,6 +54,8 @@ stage('Deploy Dev') {
 }
 
 stage('Deploy Stag') {
+  env.JAVA_HOME="${jdkHome}"
+  env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
   if (GIT_BRANCH == 'develop') {
     slackSend message:"""
       @here Ready to Promote Job to Stag?
@@ -76,6 +84,8 @@ stage('Deploy Stag') {
 }
 
 stage('Deploy Prod') {
+  env.JAVA_HOME="${jdkHome}"
+  env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
   if (GIT_BRANCH == 'master') {
     slackSend message:"""
       @here Ready to Promote Job to Production?
